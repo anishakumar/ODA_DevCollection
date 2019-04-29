@@ -1,0 +1,2626 @@
+{
+	"info": {
+		"_postman_id": "7c18d24d-f260-0162-890e-f9c3c453d1d4",
+		"name": "Automation-Dev",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Register App",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "994a1d78-3127-4aeb-84c5-3bf05d28006b",
+						"exec": [
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"//print the appId for the app generated",
+							"tests[\"id = \" + jsonData.id] = true; ",
+							"var appID = jsonData.id;",
+							"",
+							"//appID is not null",
+							"tests[\"appID is not empty\"] = appID != null;",
+							"",
+							"",
+							"postman.setEnvironmentVariable(\"appId\", jsonData.id);",
+							"postman.setEnvironmentVariable(\"appName\", jsonData.name);",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Cache-Control",
+						"value": "no-cache"
+					},
+					{
+						"key": "charset",
+						"value": "UTF-8"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "postman-token",
+						"value": "ceac460a-0561-13d8-7f10-5f7245623b0e"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n  \r\n  \"description\": \"Anish\",\r\n  \"name\": \"Automation{{$timestamp}}\",\r\n   \"partnerProfile\": {\r\n    \"email\": \"anish.kumar@plantronics.com\",\r\n    \"firstName\": \"Anish\",\r\n    \"lastName\": \"DEV\",\r\n    \"partnerName\": \"Automation{{$timestamp}}\"\r\n  }\r\n\r\n}"
+				},
+				"url": {
+					"raw": "{{url}}v1/app",
+					"host": [
+						"{{url}}v1"
+					],
+					"path": [
+						"app"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Subscribe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1fad5839-a0cc-43f2-8b51-459c4cc77c0c",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"\r",
+							"\r",
+							"for (var i = 0; i < jsonData.subscriptions.length; i++){\r",
+							"    \r",
+							"    var str = \"id_\"+jsonData.subscriptions[i].apiSubscription;\r",
+							"    \r",
+							"     postman.setEnvironmentVariable(str, jsonData.subscriptions[i].id);\r",
+							"     \r",
+							"     //console.log(str);\r",
+							"    \r",
+							"}\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Cache-Control",
+						"value": "no-cache"
+					},
+					{
+						"key": "charset",
+						"value": "UTF-8"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "postman-token",
+						"value": "a8274e22-298a-fe0b-842a-a5f6e1ea853a"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/partner/app/{{appId}}/authrequests?tenantApiCode={{tenantId}}&subscription=CALLREALTIME&subscription=CALLHISTORICAL&subscription=HEALTHREALTIME&subscription=HEALTHHISTORICAL&subscription=ASSETREALTIME&subscription=ASSETHISTORICAL&subscription=AUDITLOGS",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"partner",
+						"app",
+						"{{appId}}",
+						"authrequests"
+					],
+					"query": [
+						{
+							"key": "tenantApiCode",
+							"value": "{{tenantId}}"
+						},
+						{
+							"key": "subscription",
+							"value": "CALLREALTIME"
+						},
+						{
+							"key": "subscription",
+							"value": "CALLHISTORICAL"
+						},
+						{
+							"key": "subscription",
+							"value": "HEALTHREALTIME"
+						},
+						{
+							"key": "subscription",
+							"value": "HEALTHHISTORICAL"
+						},
+						{
+							"key": "subscription",
+							"value": "ASSETREALTIME"
+						},
+						{
+							"key": "subscription",
+							"value": "ASSETHISTORICAL"
+						},
+						{
+							"key": "subscription",
+							"value": "AUDITLOGS"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Authorize",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "70a555cc-ec08-4cf3-a004-27750b171ab0",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"var status = jsonData.status;",
+							"console.log(status);",
+							"",
+							"tests[\"Status is set to authorized\"] = jsonData[0].status === \"AUTHORIZED\";"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[{\n\t\"id\": \"{{id_ASSETHISTORICAL}}\",\n\t\"tenantId\": \"{{tenantId}}\",\n\t\"appId\": \"{{appId}}\",\n\t\"subscription\": \"ASSET\",\n\t\"apiSubscription\": \"ASSETHISTORICAL\",\n\t\"status\": \"AUTHORIZED\"\n\t\n},\n\n{\n\t\"id\": \"{{id_ASSETREALTIME}}\",\n\t\"tenantId\": \"{{tenantId}}\",\n\t\"appId\": \"{{appId}}\",\n\t\"subscription\": \"ASSET\",\n\t\"apiSubscription\": \"ASSETREALTIME\",\n\t\"status\": \"AUTHORIZED\"\n},\n\n{\n\t\"id\": \"{{id_CALLHISTORICAL}}\",\n\t\"tenantId\": \"{{tenantId}}\",\n\t\"appId\": \"{{appId}}\",\n\t\"subscription\": \"CALL\",\n\t\"apiSubscription\": \"CALLHISTORICAL\",\n\t\"status\": \"AUTHORIZED\"\t\n},\n\n{\n\t\n\t\t\"id\": \"{{id_CALLREALTIME}}\",\n\t\"tenantId\": \"{{tenantId}}\",\n\t\"appId\": \"{{appId}}\",\n\t\"subscription\": \"CALL\",\n\t\"apiSubscription\": \"CALLREALTIME\",\n\t\"status\": \"AUTHORIZED\"\n},\n{\n\t\n\t\t\"id\": \"{{id_HEALTHHISTORICAL}}\",\n\t\"tenantId\": \"{{tenantId}}\",\n\t\"appId\": \"{{appId}}\",\n\t\"subscription\": \"HEALTH\",\n\t\"apiSubscription\": \"HEALTHHISTORICAL\",\n\t\"status\": \"AUTHORIZED\"\n},\n\n{\n\t\n\t\t\"id\": \"{{id_HEALTHREALTIME}}\",\n\t\"tenantId\": \"{{tenantId}}\",\n\t\"appId\": \"{{appId}}\",\n\t\"subscription\": \"HEALTH\",\n\t\"apiSubscription\": \"HEALTHREALTIME\",\n\t\"status\": \"AUTHORIZED\"\n},\n\n{\n\t\n\t\t\"id\": \"{{id_VERSIONPOLICY}}\",\n\t\"tenantId\": \"{{tenantId}}\",\n\t\"appId\": \"{{appId}}\",\n\t\"subscription\": \"ASSET\",\n\t\"apiSubscription\": \"VERSIONPOLICY\",\n\t\"status\": \"AUTHORIZED\"\n},\n\n{\n\t\n\t\t\"id\": \"{{id_AUDITLOGS}}\",\n\t\"tenantId\": \"{{tenantId}}\",\n\t\"appId\": \"{{appId}}\",\n\t\"subscription\": \"ASSET\",\n\t\"apiSubscription\": \"AUDITLOGS\",\n\t\"status\": \"AUTHORIZED\"\n}\n\n]\n\t\n\n\t"
+				},
+				"url": {
+					"raw": "{{url}}v1/partner/apps/{{appId}}",
+					"host": [
+						"{{url}}v1"
+					],
+					"path": [
+						"partner",
+						"apps",
+						"{{appId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Partner/App Info",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"postman.setEnvironmentVariable(\"partnerId\", jsonData.partnerProfile.partnerId);",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}v1/partner/app/{{appId}}",
+					"host": [
+						"{{url}}v1"
+					],
+					"path": [
+						"partner",
+						"app",
+						"{{appId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Call Summary-Required Params",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "813263b7-228e-42de-a453-2000a99eb2a2",
+						"exec": [
+							"",
+							"//Check response code of the API",
+							"tests[\"Successful POST request\"] = responseCode.code == 200 ",
+							"",
+							"//Check if the content is not empty",
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"var content = jsonData.body.content;",
+							"",
+							"tests[\"content is not empty\"] = (content != null && content.length != 0);",
+							"",
+							"//check tenantID value",
+							"var tenantID = jsonData.body.content[0].tenantId;",
+							"tests[\"Correct tenantID\"] = tenantID === \"534ebed7-1a74-42c7-8315-608a81aeea8c\";",
+							"",
+							"",
+							"//check tenantName value",
+							"var tenantName = jsonData.body.content[0].tenantName;",
+							"tests[\"Correct tenantName\"] = tenantName === \"automation\";",
+							"",
+							"",
+							"tests[\"Product fields are not null in the response\"] =  jsonData.body.content[0].product.family !== null &&",
+							"                                                        jsonData.body.content[0].product.modelId !== null &&",
+							"                                                        jsonData.body.content[0].product.type !== null &&",
+							"                                                        jsonData.body.content[0].product.type !== null ;",
+							"                                                ",
+							"tests[\"Device fields are not null in the response\"] =  jsonData.body.content[0].device.id !== null &&",
+							"                                                       jsonData.body.content[0].device.displayId !== null &&",
+							"                                                       jsonData.body.content[0].device.firmwareVersion !== null &&",
+							"                                                       jsonData.body.content[0].device.hasActivePolicy !== null &&",
+							"                                                       jsonData.body.content[0].device.versionCompliant !== null;",
+							"                                                       ",
+							"                                                       ",
+							"tests[\"Call fields are not null in the response\"] =    jsonData.body.content[0].call.id !== null &&",
+							"                                                       jsonData.body.content[0].call.startTime !== null &&",
+							"                                                       jsonData.body.content[0].call.endTime !== null &&",
+							"                                                       jsonData.body.content[0].call.duration !== null &&",
+							"                                                       jsonData.body.content[0].call.direction !== null &&",
+							"                                                       jsonData.body.content[0].call.source !== null &&",
+							"                                                       jsonData.body.content[0].call.pluginId !== null &&",
+							"                                                       jsonData.body.content[0].call.softphoneVersion !== null &&",
+							"                                                       jsonData.body.content[0].call.lineType !== null;",
+							"                                                       ",
+							"tests[\"User fields are not null in the response\"] =    jsonData.body.content[0].user.clientInstanceId !== null &&",
+							"                                                       jsonData.body.content[0].user.username !== null &&",
+							"                                                       jsonData.body.content[0].user.hostname !== null &&",
+							"                                                       jsonData.body.content[0].user.hostOs !== null;",
+							"",
+							"tests[\"Conversation Analysis fields are not null in the response\"] =    jsonData.body.content[0].conversationAnalysisStats.acousticIncidents !== null &&",
+							"                                                                        jsonData.body.content[0].conversationAnalysisStats.acousticIncidentDuration !== null &&",
+							"                                                                        jsonData.body.content[0].conversationAnalysisStats.nearTalkDuration !== null &&",
+							"                                                                        jsonData.body.content[0].conversationAnalysisStats.farTalkDuration !== null &&",
+							"                                                                        jsonData.body.content[0].conversationAnalysisStats.overTalkDuration !== null &&",
+							"                                                                        jsonData.body.content[0].conversationAnalysisStats.noTalkDuration !== null &&",
+							"                                                                        jsonData.body.content[0].conversationAnalysisStats.cdReports !== null &&",
+							"                                                                        jsonData.body.content[0].conversationAnalysisStats.cdPeriodicity !== null &&",
+							"                                                                        jsonData.body.content[0].conversationAnalysisStats.mutedDuration !== null &&",
+							"                                                                        jsonData.body.content[0].conversationAnalysisStats.muteOnEvents !== null &&",
+							"                                                                        jsonData.body.content[0].conversationAnalysisStats.volumeUpPress !== null &&",
+							"                                                                        jsonData.body.content[0].conversationAnalysisStats.volumeDownPress !== null;",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "appID",
+						"value": "{{appId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}v1/reports/usage/tenant/{{tenantId}}/callsummary?callStartFromDateTime=2016-01-23T00:00:15.872Z&callEndToDateTime=2019-07-23T00:48:44.872Z&page=0&count=99",
+					"host": [
+						"{{url}}v1"
+					],
+					"path": [
+						"reports",
+						"usage",
+						"tenant",
+						"{{tenantId}}",
+						"callsummary"
+					],
+					"query": [
+						{
+							"key": "callStartFromDateTime",
+							"value": "2016-01-23T00:00:15.872Z"
+						},
+						{
+							"key": "callEndToDateTime",
+							"value": "2019-07-23T00:48:44.872Z"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "99"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Device adoption-out of service",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"",
+							"//Check response code of the API",
+							"tests[\"Successful POST request\"] = responseCode.code == 200 ",
+							"",
+							"//Check if the content is not empty",
+							"var jsonData = JSON.parse(responseBody);",
+							"var content = jsonData.body.content;",
+							"tests[\"content is not empty\"] = (content != null && content.length != 0);",
+							"",
+							"//check tenantID value",
+							"var tenantID = jsonData.body.content[0].tenantId;",
+							"tests[\"Correct tenantID\"] = tenantID === \"534ebed7-1a74-42c7-8315-608a81aeea8c\";",
+							"",
+							"//check tenantID value",
+							"var tenantName = jsonData.body.content[0].tenantName;",
+							"tests[\"Correct tenantName\"] = tenantName === \"automation\";",
+							"",
+							"",
+							"//check values for each field if necessary",
+							"//var val = jsonData.body.content[0].lastSeen.clientInstanceId;",
+							"",
+							"//Test cases to validate non null values",
+							"tests[\"Product fields are not null in the response\"] =  jsonData.body.content[0].product.manufacturer !== null &&",
+							"                                                        jsonData.body.content[0].product.family !== null &&",
+							"                                                        jsonData.body.content[0].product.name !== null &&",
+							"                                                        jsonData.body.content[0].product.modelId !== null &&",
+							"                                                        jsonData.body.content[0].product.type !== null &&",
+							"                                                        jsonData.body.content[0].product.vendorId !== null;",
+							"                                                        ",
+							"                                                        ",
+							"                                                                                                                ",
+							"tests[\"LastSeen fields are not null in the response\"] = jsonData.body.content[0].lastSeen.clientInstanceId !== null &&",
+							"                                                        jsonData.body.content[0].lastSeen.username !== null &&",
+							"                                                        jsonData.body.content[0].lastSeen.hostname !== null &&",
+							"                                                        jsonData.body.content[0].lastSeen.date !== null;",
+							"",
+							"tests[\"FirstSeen fields are not null in the response\"] = jsonData.body.content[0].firstSeen.clientInstanceId !== null &&",
+							"                                                        jsonData.body.content[0].firstSeen.username !== null &&",
+							"                                                        jsonData.body.content[0].firstSeen.hostname !== null &&",
+							"                                                        jsonData.body.content[0].firstSeen.date !== null;",
+							"                                            ",
+							"tests[\"Softphone fields are not null in the response\"] =jsonData.body.content[0].softphone.name !== null &&",
+							"                                                        jsonData.body.content[0].softphone.version !== null;",
+							"                                                        ",
+							"",
+							"tests[\"Device fields are not null in the response\"] =  jsonData.body.content[0].device.id !== null &&",
+							"                                                        jsonData.body.content[0].device.displayId !== null &&",
+							"                                                        jsonData.body.content[0].device.firmwareVersion !== null &&",
+							"                                                        jsonData.body.content[0].device.policyFirmwareVersion !== null &&",
+							"                                                        jsonData.body.content[0].device.hasActivePolicy !== null &&",
+							"                                                        jsonData.body.content[0].device.policyId !== null &&",
+							"                                                        jsonData.body.content[0].device.usbFwVersion !== null &&",
+							"                                                        jsonData.body.content[0].device.baseFwVersion !== null &&",
+							"                                                        jsonData.body.content[0].device.btFwVersion !== null &&",
+							"                                                        jsonData.body.content[0].device.versionCompliant !== null;",
+							"",
+							"                                                ",
+							"                                                ",
+							"                                    ",
+							"                                ",
+							"  ",
+							"  ",
+							"//Check output on console                                ",
+							"//console.log(val);",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "appID",
+						"value": "{{appId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/reports/usage/tenant/{{tenantId}}/deviceadoption?deviceState=OUTOFSERVICE&page=0&count=10",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"reports",
+						"usage",
+						"tenant",
+						"{{tenantId}}",
+						"deviceadoption"
+					],
+					"query": [
+						{
+							"key": "deviceState",
+							"value": "OUTOFSERVICE"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Device Distribution",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"",
+							"//Check response code of the API",
+							"tests[\"Successful POST request\"] = responseCode.code == 200 ",
+							"",
+							"//Check if the content is not empty",
+							"var jsonData = JSON.parse(responseBody);",
+							"var content = jsonData.body.content;",
+							"tests[\"content is not empty\"] = (content != null && content.length != 0);",
+							"",
+							"//check tenantID value",
+							"var tenantID = jsonData.body.content[0].tenantId;",
+							"tests[\"Correct tenantID\"] = tenantID === \"534ebed7-1a74-42c7-8315-608a81aeea8c\";",
+							"",
+							"//check tenantID value",
+							"var tenantName = jsonData.body.content[0].tenantName;",
+							"tests[\"Correct tenantName\"] = tenantName === \"automation\";",
+							"",
+							"//var value = jsonData.body.content[0].device[0].product.name;",
+							"",
+							"//Test cases to validate non null values",
+							"tests[\"Device fields are not null in the response\"] =  jsonData.body.content[0].device[0].id !== null &&",
+							"                                                       jsonData.body.content[0].device[0].displayId !== null &&",
+							"                                                       jsonData.body.content[0].device[0].lastSeen !== null &&",
+							"                                                       jsonData.body.content[0].device[0].product.manufacturer !== null &&",
+							"                                                       jsonData.body.content[0].device[0].product.family !== null &&",
+							"                                                       jsonData.body.content[0].device[0].product.name !== null &&",
+							"                                                       jsonData.body.content[0].device[0].product.modelId !== null;",
+							"//console.log(value);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "appID",
+						"value": "{{appId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/reports/assets/tenant/{{tenantId}}/devicedistribution?page=0&count=10",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"reports",
+						"assets",
+						"tenant",
+						"{{tenantId}}",
+						"devicedistribution"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Version status-Software",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"",
+							"//Check response code of the API",
+							"tests[\"Successful POST request\"] = responseCode.code == 200 ",
+							"",
+							"//Check if the content is not empty",
+							"var jsonData = JSON.parse(responseBody);",
+							"var content = jsonData.body.content;",
+							"tests[\"content is not empty\"] = (content != null && content.length != 0);",
+							"",
+							"//check tenantID value",
+							"var tenantID = jsonData.body.content[0].tenantId;",
+							"tests[\"Correct tenantID\"] = tenantID === \"534ebed7-1a74-42c7-8315-608a81aeea8c\";",
+							"",
+							"//check tenantID value",
+							"var tenantName = jsonData.body.content[0].tenantName;",
+							"tests[\"Correct tenantName\"] = tenantName === \"automation\";",
+							"",
+							"//var test = jsonData.body.content[0].user.hostOsVersion;",
+							"//Test cases to validate non null values",
+							"",
+							"//console.log(test);",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "appID",
+						"value": "{{appId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/reports/assets/tenant/{{tenantId}}/versionstatus/software?complianceStatus=NOPOLICY&page=0&count=99",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"reports",
+						"assets",
+						"tenant",
+						"{{tenantId}}",
+						"versionstatus",
+						"software"
+					],
+					"query": [
+						{
+							"key": "complianceStatus",
+							"value": "NOPOLICY"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "99"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Version status Complaint- firmware",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "eb92dcca-b03b-4bb0-a3a5-8e30fd4ec3de",
+						"exec": [
+							"",
+							"//Check response code of the API",
+							"tests[\"Successful POST request\"] = responseCode.code == 200 ",
+							"",
+							"//Check if the content is not empty",
+							"var jsonData = JSON.parse(responseBody);",
+							"var content = jsonData.body.content;",
+							"tests[\"content is not empty\"] = (content != null && content.length != 0);",
+							"",
+							"//check tenantID value",
+							"var tenantID = jsonData.body.content[0].tenantId;",
+							"tests[\"Correct tenantID\"] = tenantID === \"534ebed7-1a74-42c7-8315-608a81aeea8c\";",
+							"",
+							"//check tenantID value",
+							"var tenantName = jsonData.body.content[0].tenantName;",
+							"tests[\"Correct tenantName\"] = tenantName === \"automation\";",
+							"",
+							"//Test cases to validate non null values",
+							"tests[\"Device Firmware fields are not null in the response\"] =  jsonData.body.content[0].device.id !== null &&",
+							"                                                             jsonData.body.content[0].device.displayId !== null &&",
+							"                                                             jsonData.body.content[0].device.firmwareVersion !== null &&",
+							"                                                             jsonData.body.content[0].device.policyFirmwareVersion !== null &&",
+							"                                                             jsonData.body.content[0].device.hasActivePolicy !== null &&",
+							"                                                             jsonData.body.content[0].device.policyId !== null &&",
+							"                                                             jsonData.body.content[0].device.usbFwVersion !== null &&",
+							"                                                             jsonData.body.content[0].device.baseFwVersion !== null",
+							"                                                             jsonData.body.content[0].device.btFwVersion !== null",
+							"                                                             jsonData.body.content[0].device.versionCompliant !== null;",
+							"                                                             ",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "appID",
+						"value": "{{appId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/reports/assets/tenant/{{tenantId}}/versionstatus/firmware?complianceStatus=COMPLIANT&page=0&count=99",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"reports",
+						"assets",
+						"tenant",
+						"{{tenantId}}",
+						"versionstatus",
+						"firmware"
+					],
+					"query": [
+						{
+							"key": "complianceStatus",
+							"value": "COMPLIANT"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "99"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Conversation Analysis",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"//Check for 200OK response Code",
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"//Check if the content is not empty",
+							"var jsonData = JSON.parse(responseBody);",
+							"var content = jsonData.body.content;",
+							"tests[\"content is not empty\"] = (content != null && content.length != 0);",
+							"",
+							"//check tenantID value",
+							"var tenantID = jsonData.body.content[0].tenantId;",
+							"tests[\"Correct tenantID\"] = tenantID === \"534ebed7-1a74-42c7-8315-608a81aeea8c\";",
+							"",
+							"//check tenantID value",
+							"var tenantName = jsonData.body.content[0].tenantName;",
+							"tests[\"Correct tenantName\"] = tenantName === \"automation\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "appID",
+						"value": "{{appId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}v1/device/callsummary/conversationanaylsis?deviceId=23E31E17CAE2FC4EA89366A8684C9235&startDate=2017-01-23T00%3A00%3A15.872Z&endDate=2018-07-07T00%3A48%3A44.872Z&aggregateLevel=device&page=0&count=10&tenantApiCode={{tenantId}}",
+					"host": [
+						"{{url}}v1"
+					],
+					"path": [
+						"device",
+						"callsummary",
+						"conversationanaylsis"
+					],
+					"query": [
+						{
+							"key": "deviceId",
+							"value": "23E31E17CAE2FC4EA89366A8684C9235"
+						},
+						{
+							"key": "startDate",
+							"value": "2017-01-23T00%3A00%3A15.872Z"
+						},
+						{
+							"key": "endDate",
+							"value": "2018-07-07T00%3A48%3A44.872Z"
+						},
+						{
+							"key": "aggregateLevel",
+							"value": "device"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "10"
+						},
+						{
+							"key": "tenantApiCode",
+							"value": "{{tenantId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cdevents_deskphone_Monthly",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"//Check response code of the API",
+							"tests[\"Successful POST request\"] = responseCode.code == 200 ",
+							"",
+							"",
+							"//Check if the content is not empty",
+							"var jsonData = JSON.parse(responseBody);",
+							"var content = jsonData.body.content;",
+							"tests[\"content is not empty\"] = (content != null && content.length != 0);",
+							"",
+							"//check tenantID value",
+							"var tenantID = jsonData.body.content[0].tenantId;",
+							"tests[\"Correct tenantID\"] = tenantID === \"534ebed7-1a74-42c7-8315-608a81aeea8c\";",
+							"",
+							"//check tenantID value",
+							"var tenantName = jsonData.body.content[0].tenantName;",
+							"tests[\"Correct tenantName\"] = tenantName === \"Automation\";",
+							"",
+							"//check field values to be not null",
+							"tests[\"Validate field values to be not null\"] =       jsonData.body.content[0].deviceId !== null &&",
+							"                                                      jsonData.body.content[0].nearTalkDuration !== null &&",
+							"                                                      jsonData.body.content[0].farTalkDuration !== null &&",
+							"                                                      jsonData.body.content[0].overTalkDuration !== null &&",
+							"                                                      jsonData.body.content[0].noTalkDuration !== null &&",
+							"                                                      jsonData.body.content[0].cdReports !== null &&",
+							"                                                      jsonData.body.content[0].cdPeriodicity !== null;",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "appId",
+						"value": "{{appId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/reports/conversationanalysis/tenant/{{tenantId}}/cdevents?phoneType=DESKPHONE&period=MONTHLY&startDate=2000-06-01T22%3A55%3A57.716Z&endDate=2020-09-11T22%3A55%3A57.716Z&aggregateLevel=device&page=0&count=10&deviceId=S/N0FJ7DP",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"reports",
+						"conversationanalysis",
+						"tenant",
+						"{{tenantId}}",
+						"cdevents"
+					],
+					"query": [
+						{
+							"key": "phoneType",
+							"value": "DESKPHONE"
+						},
+						{
+							"key": "period",
+							"value": "MONTHLY"
+						},
+						{
+							"key": "startDate",
+							"value": "2000-06-01T22%3A55%3A57.716Z"
+						},
+						{
+							"key": "endDate",
+							"value": "2020-09-11T22%3A55%3A57.716Z"
+						},
+						{
+							"key": "aggregateLevel",
+							"value": "device"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "10"
+						},
+						{
+							"key": "deviceId",
+							"value": "S/N0FJ7DP"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "muteUsage-Never",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"//Check response code of the API",
+							"tests[\"Successful POST request\"] = responseCode.code == 200 ",
+							"",
+							"//Check if the content is not empty",
+							"var jsonData = JSON.parse(responseBody);",
+							"var content = jsonData.body.content;",
+							"tests[\"content is not empty\"] = (content != null && content.length != 0);",
+							"",
+							"//check tenantID value",
+							"var tenantID = jsonData.body.content[0].tenantId;",
+							"tests[\"Correct tenantID\"] = tenantID === \"534ebed7-1a74-42c7-8315-608a81aeea8c\";",
+							"",
+							"//check tenantID value",
+							"var tenantName = jsonData.body.content[0].tenantName;",
+							"tests[\"Correct tenantName\"] = tenantName === \"automation\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "appId",
+						"value": "{{appId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}v1/reports/usage/commonactions/tenant/{{tenantId}}/muteusage?muteUsageLevel=NEVER&callStartFromDateTime=2014-01-23T00:00:15.872Z&callEndToDateTime=2019-01-23T00:00:15.872Z&page=0&count=1",
+					"host": [
+						"{{url}}v1"
+					],
+					"path": [
+						"reports",
+						"usage",
+						"commonactions",
+						"tenant",
+						"{{tenantId}}",
+						"muteusage"
+					],
+					"query": [
+						{
+							"key": "muteUsageLevel",
+							"value": "NEVER"
+						},
+						{
+							"key": "callStartFromDateTime",
+							"value": "2014-01-23T00:00:15.872Z"
+						},
+						{
+							"key": "callEndToDateTime",
+							"value": "2019-01-23T00:00:15.872Z"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "QD-Quick Disconnect",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"",
+							"//Check response code of the API",
+							"tests[\"Successful POST request\"] = responseCode.code == 200 ",
+							"",
+							"//Check if the content is not empty",
+							"var jsonData = JSON.parse(responseBody);",
+							"var content = jsonData.body.content;",
+							"tests[\"content is not empty\"] = (content != null && content.length != 0);",
+							"",
+							"//check tenantID value",
+							"var tenantID = jsonData.body.content[0].tenantId;",
+							"tests[\"Correct tenantID\"] = tenantID === \"534ebed7-1a74-42c7-8315-608a81aeea8c\";",
+							"",
+							"//check tenantID value",
+							"var tenantName = jsonData.body.content[0].tenantName;",
+							"tests[\"Correct tenantName\"] = tenantName === \"automation\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "appID",
+						"value": "{{appId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/reports/usage/commonactions/tenant/{{tenantId}}/quickdisconnectusage?eventFromDate=2015-01-01T21%3A06%3A18.804Z&eventToDate=2018-08-08T21%3A06%3A18.804Z&page=0&count=10",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"reports",
+						"usage",
+						"commonactions",
+						"tenant",
+						"{{tenantId}}",
+						"quickdisconnectusage"
+					],
+					"query": [
+						{
+							"key": "eventFromDate",
+							"value": "2015-01-01T21%3A06%3A18.804Z"
+						},
+						{
+							"key": "eventToDate",
+							"value": "2018-08-08T21%3A06%3A18.804Z"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Volume Adjustments",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"",
+							"//Check response code of the API",
+							"tests[\"Successful POST request\"] = responseCode.code == 200 ",
+							"",
+							"//Check if the content is not empty",
+							"var jsonData = JSON.parse(responseBody);",
+							"var content = jsonData.body.content;",
+							"tests[\"content is not empty\"] = (content != null && content.length != 0);",
+							"",
+							"//check tenantID value",
+							"var tenantID = jsonData.body.content[0].tenantId;",
+							"tests[\"Correct tenantID\"] = tenantID === \"534ebed7-1a74-42c7-8315-608a81aeea8c\";",
+							"",
+							"//check tenantID value",
+							"var tenantName = jsonData.body.content[0].tenantName;",
+							"tests[\"Correct tenantName\"] = tenantName === \"automation\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "appId",
+						"value": "{{appId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/reports/usage/commonactions/tenant/{{tenantId}}/volumeadjustments?callStartFromDateTime=2017-06-01T21%3A06%3A18.804Z&callEndToDateTime=2019-06-01T21%3A06%3A18.804Z&page=0&count=10",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"reports",
+						"usage",
+						"commonactions",
+						"tenant",
+						"{{tenantId}}",
+						"volumeadjustments"
+					],
+					"query": [
+						{
+							"key": "callStartFromDateTime",
+							"value": "2017-06-01T21%3A06%3A18.804Z"
+						},
+						{
+							"key": "callEndToDateTime",
+							"value": "2019-06-01T21%3A06%3A18.804Z"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Device Inventory-DeviceID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"//Check response code of the API",
+							"tests[\"Successful POST request\"] = responseCode.code == 200 ",
+							"",
+							"//Check if the content is not empty",
+							"var jsonData = JSON.parse(responseBody);",
+							"var content = jsonData;",
+							"tests[\"content is not empty\"] = (content != null && content.length != 0);",
+							"",
+							"//check tenantID value",
+							"var tenantID = content.tenantId;",
+							"tests[\"Correct tenantID\"] = tenantID === \"534ebed7-1a74-42c7-8315-608a81aeea8c\";",
+							"",
+							"",
+							"//check tenantID value",
+							"var tenantName = content.tenantName;",
+							"tests[\"Correct tenantName\"] = tenantName === \"automation\";",
+							"",
+							"",
+							"//var test = jsonData._embedded.deviceInventoryList.product[0].manufacturer;",
+							"//tests[\"Device fields are not null in the response\"] =  jsonData._embedded.deviceInventoryList.manufacturer !== null &&",
+							"                                                      // jsonData._embedded.deviceInventoryList !== null &&",
+							"                                                      // jsonData._embedded.deviceInventoryList !== null &&",
+							"                                                      // jsonData._embedded.deviceInventoryList !== null",
+							"                                                       ",
+							"",
+							"//console.log(test);",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cache-Control",
+						"value": "no-cache"
+					},
+					{
+						"key": "charset",
+						"value": "UTF-8"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "postman-token",
+						"value": "5051203e-5646-a2ad-1b74-03ea2227cbca"
+					},
+					{
+						"key": "appID",
+						"value": "{{appId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/reports/assets/tenant/{{tenantId}}/device/23E31E17CAE2FC4EA89366A8684C9235",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"reports",
+						"assets",
+						"tenant",
+						"{{tenantId}}",
+						"device",
+						"23E31E17CAE2FC4EA89366A8684C9235"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeviceInventory-DisplayID",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "appID",
+						"value": "{{appId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}v1/reports/assets/tenant/{{tenantId}}/device/0AGTJ9/?lastSeenStartTime=2016-01-23T00:00:15.872Z&lastSeenEndTime=2019-01-23T00:00:15.872Z&page=0&count=4",
+					"host": [
+						"{{url}}v1"
+					],
+					"path": [
+						"reports",
+						"assets",
+						"tenant",
+						"{{tenantId}}",
+						"device",
+						"0AGTJ9",
+						""
+					],
+					"query": [
+						{
+							"key": "lastSeenStartTime",
+							"value": "2016-01-23T00:00:15.872Z"
+						},
+						{
+							"key": "lastSeenEndTime",
+							"value": "2019-01-23T00:00:15.872Z"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeviceInventory-DeviceID with Params",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"//Check response code of the API",
+							"tests[\"Successful POST request\"] = responseCode.code == 200 ",
+							"",
+							"//Check if the content is not empty",
+							"var jsonData = JSON.parse(responseBody);",
+							"var content = jsonData;",
+							"tests[\"content is not empty\"] = (content != null && content.length != 0);",
+							"",
+							"//check tenantID value",
+							"var tenantID = content.tenantId;",
+							"tests[\"Correct tenantID\"] = tenantID === \"534ebed7-1a74-42c7-8315-608a81aeea8c\";",
+							"",
+							"",
+							"//check tenantID value",
+							"var tenantName = content.tenantName;",
+							"tests[\"Correct tenantName\"] = tenantName === \"automation\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "appID",
+						"value": "{{appId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}v1/reports/assets/tenant/{{tenantId}}/device/23E31E17CAE2FC4EA89366A8684C9235/?lastSeenStartTime=2015-01-22T23%3A23%3A09.090Z&lastSeenEndTime=2018-07-03T13%3A59%3A42.069Z&page=0&count=4",
+					"host": [
+						"{{url}}v1"
+					],
+					"path": [
+						"reports",
+						"assets",
+						"tenant",
+						"{{tenantId}}",
+						"device",
+						"23E31E17CAE2FC4EA89366A8684C9235",
+						""
+					],
+					"query": [
+						{
+							"key": "lastSeenStartTime",
+							"value": "2015-01-22T23%3A23%3A09.090Z"
+						},
+						{
+							"key": "lastSeenEndTime",
+							"value": "2018-07-03T13%3A59%3A42.069Z"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Device Inventory-PLT Active",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"//Check response code of the API",
+							"tests[\"Successful POST request\"] = responseCode.code == 200 ",
+							"",
+							"//Check if the content is not empty",
+							"var jsonData = JSON.parse(responseBody);",
+							"var content = jsonData;",
+							"tests[\"content is not empty\"] = (content != null && content.length != 0);",
+							"",
+							"//check tenantID value",
+							"var tenantID = jsonData.body.content[0].tenantId;",
+							"tests[\"Correct tenantID\"] = tenantID === \"534ebed7-1a74-42c7-8315-608a81aeea8c\";",
+							"",
+							"",
+							"//check tenantID value",
+							"var tenantName = jsonData.body.content[0].tenantName;",
+							"tests[\"Correct tenantName\"] = tenantName === \"automation\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cache-Control",
+						"value": "no-cache"
+					},
+					{
+						"key": "charset",
+						"value": "UTF-8"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "postman-token",
+						"value": "5051203e-5646-a2ad-1b74-03ea2227cbca"
+					},
+					{
+						"key": "appID",
+						"value": "{{appId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/reports/assets/tenant/{{tenantId}}/devices?lastSeenStartTime=2015-01-22T23:23:09.090Z&lastSeenEndTime=2019-07-03T13:59:42.069Z&page=0&count=4&manufacturer=PLANTRONICS&devicestate=INACTIVE",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"reports",
+						"assets",
+						"tenant",
+						"{{tenantId}}",
+						"devices"
+					],
+					"query": [
+						{
+							"key": "lastSeenStartTime",
+							"value": "2015-01-22T23:23:09.090Z"
+						},
+						{
+							"key": "lastSeenEndTime",
+							"value": "2019-07-03T13:59:42.069Z"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "4"
+						},
+						{
+							"key": "manufacturer",
+							"value": "PLANTRONICS"
+						},
+						{
+							"key": "devicestate",
+							"value": "INACTIVE"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Device Inventory-PLT Active copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"",
+							"//Check if the content is not empty",
+							"var jsonData = JSON.parse(responseBody);",
+							"var content = jsonData;",
+							"tests[\"content is not empty\"] = (content != null && content.length != 0);",
+							"",
+							"//check tenantID value",
+							"var tenantID = jsonData.body.content[0].tenantId;",
+							"tests[\"Correct tenantID\"] = tenantID === \"534ebed7-1a74-42c7-8315-608a81aeea8c\";",
+							"",
+							"",
+							"//check tenantID value",
+							"var tenantName = jsonData.body.content[0].tenantName;",
+							"tests[\"Correct tenantName\"] = tenantName === \"NonPLT\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cache-Control",
+						"value": "no-cache"
+					},
+					{
+						"key": "charset",
+						"value": "UTF-8"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "postman-token",
+						"value": "5051203e-5646-a2ad-1b74-03ea2227cbca"
+					},
+					{
+						"key": "appID",
+						"value": "{{appId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/reports/assets/tenant/{{tenantId}}/devices?lastSeenStartTime=2015-01-22T23:23:09.090Z&lastSeenEndTime=2019-07-03T13:59:42.069Z&page=0&count=4&manufacturer=NONPLANTRONICS&devicestate=ACTIVE",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"reports",
+						"assets",
+						"tenant",
+						"{{tenantId}}",
+						"devices"
+					],
+					"query": [
+						{
+							"key": "lastSeenStartTime",
+							"value": "2015-01-22T23:23:09.090Z"
+						},
+						{
+							"key": "lastSeenEndTime",
+							"value": "2019-07-03T13:59:42.069Z"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "4"
+						},
+						{
+							"key": "manufacturer",
+							"value": "NONPLANTRONICS"
+						},
+						{
+							"key": "devicestate",
+							"value": "ACTIVE"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Device Inventory-Out of service",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"//Check response code of the API",
+							"tests[\"Successful POST request\"] = responseCode.code == 200 ",
+							"",
+							"//Check if the content is not empty",
+							"var jsonData = JSON.parse(responseBody);",
+							"var content = jsonData;",
+							"tests[\"content is not empty\"] = (content != null && content.length != 0);",
+							"",
+							"//check tenantID value",
+							"var tenantID = jsonData.body.content[0].tenantId;",
+							"tests[\"Correct tenantID\"] = tenantID === \"534ebed7-1a74-42c7-8315-608a81aeea8c\";",
+							"",
+							"",
+							"//check tenantID value",
+							"var tenantName = jsonData.body.content[0].tenantName;",
+							"tests[\"Correct tenantName\"] = tenantName === \"automation\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Cache-Control",
+						"value": "no-cache"
+					},
+					{
+						"key": "charset",
+						"value": "UTF-8"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "postman-token",
+						"value": "5051203e-5646-a2ad-1b74-03ea2227cbca"
+					},
+					{
+						"key": "appID",
+						"value": "{{appId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/reports/assets/tenant/{{tenantId}}/devices?lastSeenStartTime=2015-01-22T23:23:09.090Z&lastSeenEndTime=2018-07-03T13:59:42.069Z&page=0&count=4&manufacturer=PLANTRONICS&devicestate=OUTOFSERVICE",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"reports",
+						"assets",
+						"tenant",
+						"{{tenantId}}",
+						"devices"
+					],
+					"query": [
+						{
+							"key": "lastSeenStartTime",
+							"value": "2015-01-22T23:23:09.090Z"
+						},
+						{
+							"key": "lastSeenEndTime",
+							"value": "2018-07-03T13:59:42.069Z"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "4"
+						},
+						{
+							"key": "manufacturer",
+							"value": "PLANTRONICS"
+						},
+						{
+							"key": "devicestate",
+							"value": "OUTOFSERVICE"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Softphone Status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"",
+							"//Check response code of the API",
+							"tests[\"Successful POST request\"] = responseCode.code == 200 ",
+							"",
+							"//Check if the content is not empty",
+							"var jsonData = JSON.parse(responseBody);",
+							"var content = jsonData.body.content;",
+							"tests[\"content is not empty\"] = (content != null && content.length != 0);",
+							"",
+							"//check tenantID value",
+							"var tenantID = jsonData.body.content[0].tenantId;",
+							"tests[\"Correct tenantID\"] = tenantID === \"534ebed7-1a74-42c7-8315-608a81aeea8c\";",
+							"",
+							"//check tenantID value",
+							"var tenantName = jsonData.body.content[0].tenantName;",
+							"tests[\"Correct tenantName\"] = tenantName === \"automation\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "appID",
+						"value": "{{appId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/reports/assets/tenant/{{tenantId}}/softphone/status?page=0&count=4",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"reports",
+						"assets",
+						"tenant",
+						"{{tenantId}}",
+						"softphone",
+						"status"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Tenant Subscriptions",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"//Check response code of the API",
+							"tests[\"Successful POST request\"] = responseCode.code == 200 ",
+							"",
+							"//Check if the content is not empty",
+							"var jsonData = JSON.parse(responseBody);",
+							"var content = jsonData._embedded;",
+							"tests[\"content is not empty\"] = (content != null && content.length != 0);"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}v1/foundational/tenant/{{tenantId}}/subscriptions?page=0&count=10",
+					"host": [
+						"{{url}}v1"
+					],
+					"path": [
+						"foundational",
+						"tenant",
+						"{{tenantId}}",
+						"subscriptions"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "10"
+						}
+					]
+				},
+				"description": "\t"
+			},
+			"response": []
+		},
+		{
+			"name": "Foundational -Softphone",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"//Check response code of the API",
+							"tests[\"Successful POST request\"] = responseCode.code == 200 ",
+							"",
+							"//Check if the content is not empty",
+							"var jsonData = JSON.parse(responseBody);",
+							"var content = jsonData._embedded;",
+							"tests[\"content is not empty\"] = (content != null && content.length != 0);",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/foundational/softphones?page=0&count=10",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"foundational",
+						"softphones"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Foundational - Tenant specific users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"//Check response code of the API",
+							"tests[\"Successful POST request\"] = responseCode.code == 200 ",
+							"",
+							"//Check if the content is not empty",
+							"var jsonData = JSON.parse(responseBody);",
+							"var content = jsonData._embedded;",
+							"tests[\"content is not empty\"] = (content != null && content.length != 0);",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "appId",
+						"value": "{{appId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/foundational/tenant/{{tenantId}}/users?page=0&count=10",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"foundational",
+						"tenant",
+						"{{tenantId}}",
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Foundational Product families",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"//Check response code of the API",
+							"tests[\"Successful POST request\"] = responseCode.code == 200 ",
+							"",
+							"//Check if the content is not empty",
+							"var jsonData = JSON.parse(responseBody);",
+							"var content = jsonData._embedded;",
+							"tests[\"content is not empty\"] = (content != null && content.length != 0);",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/foundational/product/families?page=0&count=10",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"foundational",
+						"product",
+						"families"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Detected Conflicts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"",
+							"//Check response code of the API",
+							"tests[\"Successful POST request\"] = responseCode.code == 200 ",
+							"",
+							"//Check if the content is not empty",
+							"var jsonData = JSON.parse(responseBody);",
+							"var content = jsonData.body.content;",
+							"tests[\"content is not empty\"] = (content != null && content.length != 0);",
+							"",
+							"//check tenantID value",
+							"var tenantID = jsonData.body.content[0].tenantId;",
+							"tests[\"Correct tenantID\"] = tenantID === \"534ebed7-1a74-42c7-8315-608a81aeea8c\";",
+							"",
+							"//check tenantID value",
+							"var tenantName = jsonData.body.content[0].tenantName;",
+							"tests[\"Correct tenantName\"] = tenantName === \"automation\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "appID",
+						"value": "{{appId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/reports/assets/tenant/{{tenantId}}/detectedconflicts?lastSeenStartTime=2011-01-07T13%3A46%3A12.084Z&lastSeenEndTime=2017-08-09T13%3A46%3A12.084Z&page=0&count=10",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"reports",
+						"assets",
+						"tenant",
+						"{{tenantId}}",
+						"detectedconflicts"
+					],
+					"query": [
+						{
+							"key": "lastSeenStartTime",
+							"value": "2011-01-07T13%3A46%3A12.084Z"
+						},
+						{
+							"key": "lastSeenEndTime",
+							"value": "2017-08-09T13%3A46%3A12.084Z"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GA Authorized Apps",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"//Check response code of the API",
+							"tests[\"Successful POST request\"] = responseCode.code == 200 ",
+							"",
+							"",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/partner/apps/{{tenantId}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"partner",
+						"apps",
+						"{{tenantId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Acoustic Events",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"//Check response code of the API",
+							"tests[\"Successful POST request\"] = responseCode.code == 200 ",
+							"",
+							"//Check if the content is not empty",
+							"var jsonData = JSON.parse(responseBody);",
+							"var content = jsonData._embedded;",
+							"tests[\"content is not empty\"] = (content != null && content.length != 0);",
+							"",
+							"//check tenantID value",
+							"var tenantID = jsonData._embedded.acousticIncidentSummaryList[0].tenantId;",
+							"tests[\"Correct tenantID\"] = tenantID === \"534ebed7-1a74-42c7-8315-608a81aeea8c\";",
+							"",
+							"//check tenantID value",
+							"var tenantName = jsonData._embedded.acousticIncidentSummaryList[0].tenantName;",
+							"tests[\"Correct tenantName\"] = tenantName === \"automation\";",
+							"",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "appID",
+						"value": "{{appId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/reports/acousticanalysis/tenant/{{tenantId}}/acousticevents?callStartFromDateTime=2015-03-06T22%3A55%3A57.716Z&callEndToDateTime=2018-03-12T22%3A55%3A57.716Z&page=0&count=10",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"reports",
+						"acousticanalysis",
+						"tenant",
+						"{{tenantId}}",
+						"acousticevents"
+					],
+					"query": [
+						{
+							"key": "callStartFromDateTime",
+							"value": "2015-03-06T22%3A55%3A57.716Z"
+						},
+						{
+							"key": "callEndToDateTime",
+							"value": "2018-03-12T22%3A55%3A57.716Z"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LinkQuality Required Param",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"",
+							"//Check response code of the API",
+							"tests[\"Successful POST request\"] = responseCode.code == 200 ",
+							"",
+							"//Check if the content is not empty",
+							"var jsonData = JSON.parse(responseBody);",
+							"var content = jsonData.body.content;",
+							"tests[\"content is not empty\"] = (content != null && content.length != 0);",
+							"",
+							"//check tenantID value",
+							"var tenantID = jsonData.body.content[0].tenantId;",
+							"tests[\"Correct tenantID\"] = tenantID === \"534ebed7-1a74-42c7-8315-608a81aeea8c\";",
+							"",
+							"//check tenantID value",
+							"var tenantName = jsonData.body.content[0].tenantName;",
+							"tests[\"Correct tenantName\"] = tenantName === \"automation\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "appID",
+						"value": "{{appId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/reports/conversationanalysis/tenant/{{tenantId}}/linkquality?isAggregated=true&callStartTime=2015-01-01T21%3A06%3A18.804Z&callEndTime=2019-07-08T21%3A06%3A18.804Z&page=0&count=10",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"reports",
+						"conversationanalysis",
+						"tenant",
+						"{{tenantId}}",
+						"linkquality"
+					],
+					"query": [
+						{
+							"key": "isAggregated",
+							"value": "true"
+						},
+						{
+							"key": "callStartTime",
+							"value": "2015-01-01T21%3A06%3A18.804Z"
+						},
+						{
+							"key": "callEndTime",
+							"value": "2019-07-08T21%3A06%3A18.804Z"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Quick Disconnect Usage",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"",
+							"//Check response code of the API",
+							"tests[\"Successful POST request\"] = responseCode.code == 200 ",
+							"",
+							"//Check if the content is not empty",
+							"var jsonData = JSON.parse(responseBody);",
+							"var content = jsonData.body.content;",
+							"tests[\"content is not empty\"] = (content != null && content.length != 0);",
+							"",
+							"//check tenantID value",
+							"var tenantID = jsonData.body.content[0].tenantId;",
+							"tests[\"Correct tenantID\"] = tenantID === \"534ebed7-1a74-42c7-8315-608a81aeea8c\";",
+							"",
+							"//check tenantID value",
+							"var tenantName = jsonData.body.content[0].tenantName;",
+							"tests[\"Correct tenantName\"] = tenantName === \"automation\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "appId",
+						"value": "{{appId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/reports/usage/commonactions/tenant/{{tenantId}}/quickdisconnectusage?eventFromDate=2017-06-01T21%3A06%3A18.804Z&eventToDate=2019-06-08T21%3A06%3A18.804Z&page=0&count=10",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"reports",
+						"usage",
+						"commonactions",
+						"tenant",
+						"{{tenantId}}",
+						"quickdisconnectusage"
+					],
+					"query": [
+						{
+							"key": "eventFromDate",
+							"value": "2017-06-01T21%3A06%3A18.804Z"
+						},
+						{
+							"key": "eventToDate",
+							"value": "2019-06-08T21%3A06%3A18.804Z"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "noiseexposure",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Successful POST request\"] = responseCode.code == 200 ",
+							"",
+							"//Check if the content is not empty",
+							"var jsonData = JSON.parse(responseBody);",
+							"var content = jsonData._embedded;",
+							"tests[\"content is not empty\"] = (content !== null && content.length !== 0);",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "appId",
+						"value": "{{appId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/reports/acousticanalysis/tenant/{{tenantId}}/noiseexposure?greatEqPreLimiterDosage=0&lessEqPreLimiterDosage=10&reportStartFromDateTime=2016-06-01T21%3A06%3A18.804Z&reportEndToDateTime=2019-01-21T21%3A06%3A18.804Z&page=0&count=10",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"reports",
+						"acousticanalysis",
+						"tenant",
+						"{{tenantId}}",
+						"noiseexposure"
+					],
+					"query": [
+						{
+							"key": "greatEqPreLimiterDosage",
+							"value": "0"
+						},
+						{
+							"key": "lessEqPreLimiterDosage",
+							"value": "10"
+						},
+						{
+							"key": "reportStartFromDateTime",
+							"value": "2016-06-01T21%3A06%3A18.804Z"
+						},
+						{
+							"key": "reportEndToDateTime",
+							"value": "2019-01-21T21%3A06%3A18.804Z"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Audit Log",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "462e5a97-a4e9-49ec-aba1-aad0663e3511",
+						"exec": [
+							"",
+							"//Check response code of the API",
+							"tests[\"Successful POST request\"] = responseCode.code == 200 ",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "appId",
+						"value": "{{appId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}v1/reports/admin/audit/tenant/{{tenantId}}?category=API&startDate=2017-06-07T13%3A46%3A12.084Z&endDate=2019-06-09T13%3A46%3A12.084Z&page=0&count=10",
+					"host": [
+						"{{url}}v1"
+					],
+					"path": [
+						"reports",
+						"admin",
+						"audit",
+						"tenant",
+						"{{tenantId}}"
+					],
+					"query": [
+						{
+							"key": "category",
+							"value": "API"
+						},
+						{
+							"key": "startDate",
+							"value": "2017-06-07T13%3A46%3A12.084Z"
+						},
+						{
+							"key": "endDate",
+							"value": "2019-06-09T13%3A46%3A12.084Z"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Compliance Setting",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "247c469e-bf51-47aa-b1dc-749f254a88de",
+						"type": "text/javascript",
+						"exec": [
+							"",
+							"//Check response code of the API",
+							"tests[\"Successful POST request\"] = responseCode.code == 200 ",
+							"",
+							"//Check if the content is not empty",
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"var content = jsonData.body.content;",
+							"",
+							"tests[\"content is not empty\"] = (content != null && content.length != 0);",
+							"",
+							"//check tenantID value",
+							"var tenantID = jsonData.body.content[0].tenantId;",
+							"tests[\"Correct tenantID\"] = tenantID === \"534ebed7-1a74-42c7-8315-608a81aeea8c\";",
+							"",
+							"",
+							"//check tenantName value",
+							"var tenantName = jsonData.body.content[0].tenantName;",
+							"tests[\"Correct tenantName\"] = tenantName === \"automation\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "appId",
+						"value": "{{appId}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/v1/reports/assets/tenant/{{tenantId}}/compliance/settings?complianceStatus=COMPLIANT&page=0&count=10",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"reports",
+						"assets",
+						"tenant",
+						"{{tenantId}}",
+						"compliance",
+						"settings"
+					],
+					"query": [
+						{
+							"key": "complianceStatus",
+							"value": "COMPLIANT"
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "count",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete App",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"check for valid status message\"] = jsonData.status === \"Partner App references succesfully deleted in partner schema\";"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"partnerProfile\": {\n   \"email\": \"anish.kumar@plantronics.com\",\n   \"firstName\": \"anish\",\n   \"lastName\": \"DEV\",\n   \"partnerId\": \"{{partnerId}}\",\n   \"partnerName\": \"{{appName}}\"\n }\n}"
+				},
+				"url": {
+					"raw": "{{url}}/v1/partner/app/{{appId}}/?reason=tests",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"v1",
+						"partner",
+						"app",
+						"{{appId}}",
+						""
+					],
+					"query": [
+						{
+							"key": "reason",
+							"value": "tests"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Start Stream",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"//check for valid status code",
+							"tests[\"Status code is 202\"] = responseCode.code === 202;",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"var url = jsonData[0].url;",
+							"//console.log(url);",
+							"",
+							"tests[\"Check for valid start stream URL\"] = url === \"wss://plt-wss.dev.pltzone.org/start\";",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "appID",
+						"value": "44afe2be-d351-4c68-a6e9-620041401c68"
+					},
+					{
+						"key": "apikey",
+						"value": "1hKMMPFMmaldnC0rcohvXN0UX7UeWPjb",
+						"disabled": true
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "{{url}}v1/realtime/streams/notifications/start?tenantApiCode={{tenantId}}&streamType=linkQualityCallEndNotification",
+					"host": [
+						"{{url}}v1"
+					],
+					"path": [
+						"realtime",
+						"streams",
+						"notifications",
+						"start"
+					],
+					"query": [
+						{
+							"key": "tenantApiCode",
+							"value": "{{tenantId}}"
+						},
+						{
+							"key": "streamType",
+							"value": "linkQualityCallEndNotification"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
